@@ -19,7 +19,6 @@ class SurveyResponse {
 
     public function saveResponse(DatabaseConn $dbConnection) {
         $mysqli = $dbConnection->getMysqli();
-
         $email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
 
         $stmt = $mysqli->prepare("INSERT INTO survey_responses (survey_id, customer_id, question_id, answer) VALUES (?, ?, ?, ?)");
@@ -27,7 +26,7 @@ class SurveyResponse {
         $solved = $this->checkWhichTime($email, $mysqli);
 
         foreach ($this->questions as $question => $answer) {
-            $stmt->bind_param("iiss", $this->surveyId, $this->customerId, $question, $answer);
+            $stmt->bind_param("iiis", $this->surveyId, $this->customerId, $question, $answer);
             $stmt->execute();
         }
 
